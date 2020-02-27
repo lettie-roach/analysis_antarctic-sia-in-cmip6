@@ -7,6 +7,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy.ma as ma
 import scipy.stats
+from scipy import stats
 import xarray as xr
 
 months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
