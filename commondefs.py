@@ -64,7 +64,7 @@ def lat_renamer(ds):
 
 def add_trend_stats_to_ds (ds,var,varname): #var = is a data array
 
-    array_names = ['slope', 'intercept','r_value', 'p_value']
+    array_names = ['slope', 'intercept','r_value', 'p_value','std_error']
     array_names = [varname+'_'+f for f in array_names]
     ndim = var.shape
     mystats = []
@@ -74,9 +74,9 @@ def add_trend_stats_to_ds (ds,var,varname): #var = is a data array
             for j in range(ndim[2]):
                 ydata = var[i,:,j].values
                 xdata = ds.year.values[:len(ydata)]
-                slope, intercept, r_value, p_value, _ = stats.linregress(xdata[~np.isnan(ydata)], ydata[~np.isnan(ydata)])
-                mystats.append([slope, intercept, r_value, p_value])
-        mystats = np.asarray(mystats).reshape([ndim[0],ndim[2],4])
+                slope, intercept, r_value, p_value, std_error = stats.linregress(xdata[~np.isnan(ydata)], ydata[~np.isnan(ydata)])
+                mystats.append([slope, intercept, r_value, p_value, std_error])
+        mystats = np.asarray(mystats).reshape([ndim[0],ndim[2],5])
         for a, arr_name in enumerate(array_names):
             ds[arr_name] = xr.DataArray(mystats[:,:,a],dims=['name','month'])
   
@@ -87,9 +87,9 @@ def add_trend_stats_to_ds (ds,var,varname): #var = is a data array
                 if np.count_nonzero(np.isnan(ydata))>1:
                     slope, r_value, p_value = np.nan, np.nan, np.nan
                 else:
-                    slope, intercept, r_value, p_value, _ = stats.linregress(xdata[~np.isnan(ydata)], ydata[~np.isnan(ydata)])
-                mystats.append([slope, intercept, r_value, p_value])
-        mystats = np.asarray(mystats).reshape([ndim[0],4])
+                    slope, intercept, r_value, p_value, std_error = stats.linregress(xdata[~np.isnan(ydata)], ydata[~np.isnan(ydata)])
+                mystats.append([slope, intercept, r_value, p_value, std_error])
+        mystats = np.asarray(mystats).reshape([ndim[0],5])
         for a, arr_name in enumerate(array_names):
             ds[arr_name] = xr.DataArray(mystats[:,a],dims=['name'])
   
