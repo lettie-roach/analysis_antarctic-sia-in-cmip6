@@ -27,6 +27,11 @@ def get_lats(ds):
         elif 'nav_lat' in ds.coords:
             lat = ds.nav_lat.values
             lon = ds.nav_lon.values
+        elif 'rlat' in ds.coords:
+            lat = ds.rlat.values
+            lon = ds.rlon.values
+        else:
+            print(ds)
         lat = np.where(lat>1e20,0.,lat)
         if len(lat.shape)>2:
             lat = lat[0,:,:]
@@ -59,6 +64,7 @@ def lat_renamer(ds):
     else:
         print('no option for lats')
         print(ds.coords)
+        print(ds)
     return ds
 
 
